@@ -3,12 +3,12 @@ import './style.css';
 
 const App = () => {
   const [counter, setCounter] = useState(0);
-  const [isOddNumber, setIsOddNumber] = useState(false);
-  const [isEvenNumber, setIsEvenNumber] = useState(false);
-  const [isPerfectSquare, setIsPerfectSquare] = useState(false);
+  const [oddNumberList, setOddNumberList] = useState([]);
+  const [evenNumberList, setEvenNumberList] = useState([]);
+  const [perfectSquareList, setPerfectSquareList] = useState([]);
 
   useEffect(() => {
-    findOddOrEvenNumber();
+    createListBasedOnNumber();
   }, [counter]);
 
   const handleIncrement = () => {
@@ -19,15 +19,35 @@ const App = () => {
     setCounter(counter - 1);
   };
 
-  const findOddOrEvenNumber = () => {
+  const createListBasedOnNumber = () => {
+    let oddNumberListArray = [];
+    let evenNumberListArray = [];
+    let perfectSquareListArray = [], ;
+    let removeDuplicatesFromOdd, removeDuplicatesFromEven, removeDuplicatesFromPerfectSquare;
+
     const squareRootOfNumber = Math.sqrt(counter);
-    setIsPerfectSquare(Number.isInteger(squareRootOfNumber));
+    if (Number.isInteger(squareRootOfNumber)) {
+      perfectSquareListArray.push(...perfectSquareList, counter);
+      removeDuplicatesFromPerfectSquare = perfectSquareListArray.filter((list, index) => {
+          return perfectSquareListArray.indexOf(list) === index;
+        }
+      );
+      setPerfectSquareList(removeDuplicatesFromPerfectSquare);
+    }
+
     if (Math.abs(counter) % 2 === 1) {
-      setIsOddNumber(true);
-      setIsEvenNumber(false);
+      oddNumberListArray.push(...oddNumberList, counter);
+      removeDuplicatesFromOdd = oddNumberListArray.filter((list, index) => {
+        return oddNumberListArray.indexOf(list) === index;
+      });
+      setOddNumberList(removeDuplicatesFromOdd);
+      console.log(oddNumberList);
     } else if (Math.abs(counter) % 2 === 0) {
-      setIsOddNumber(false);
-      setIsEvenNumber(true);
+      evenNumberListArray.push(...evenNumberList, counter);
+      removeDuplicatesFromEven = evenNumberListArray.filter((list, index) => {
+        return evenNumberListArray.indexOf(list) === index;
+      });
+      setEvenNumberList(removeDuplicatesFromEven);
     }
   };
 
@@ -51,19 +71,17 @@ const App = () => {
       </div>
 
       <div>
+        <h4>Odd numbers: </h4>
         <li className="display-list">
-          {counter}
-          {isOddNumber ? ' is an odd number' : ' is not an odd number'}
+          {oddNumberList.length ? oddNumberList.join(', ') : '-'}
         </li>
+        <h4>Even numbers: </h4>
         <li className="display-list">
-          {counter}
-          {isEvenNumber ? ' is an even number' : ' is not an even number'}
+          {evenNumberList.length ? evenNumberList.join(', ') : '-'}
         </li>
+        <h4>Perfect Square numbers: </h4>
         <li className="display-list">
-          {counter}
-          {isPerfectSquare
-            ? ' is a perfect square number'
-            : ' is not a perfect square number'}
+          {perfectSquareList.length ? perfectSquareList.join(', ') : '-'}
         </li>
       </div>
     </div>
